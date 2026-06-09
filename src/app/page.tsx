@@ -7,7 +7,7 @@
  *
  * Font: Proxima Nova Bold (Montserrat Bold fallback via --font-proxima-nova CSS variable).
  * Buttons: Reusable Button component with colorScheme="light" for white outlined style on dark background.
- * TODO: Add auth redirect — authenticated users should not see this page.
+ * Authenticated users are redirected to their dashboard via redirectIfAuthenticated().
  */
 
 import Image from 'next/image'
@@ -15,8 +15,11 @@ import { Box, Typography, Stack } from '@mui/material'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
 import StarBorderOutlinedIcon from '@mui/icons-material/StarBorderOutlined'
 import Button from '@/components/ui/Button'
+import { redirectIfAuthenticated } from '@/lib/auth'
 
-export default function LandingPage() {
+export default async function LandingPage() {
+  await redirectIfAuthenticated()
+
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
 

@@ -8,7 +8,7 @@
  * Submission: Calls signUp() Server Action → sanitizes → supabase.auth.signUp with { name, role } metadata
  *             → DB trigger auto-creates public.users + public.user_preferences rows → role-based redirect.
  * Submit button label reflects selected role: "Sign Up as a Food Reviewer / Restaurant Owner".
- * TODO: Redirect already-authenticated users. Handle network timeout gracefully.
+ * Authenticated users are redirected to their dashboard via redirectIfAuthenticated() in (auth)/layout.tsx.
  */
 
 'use client'

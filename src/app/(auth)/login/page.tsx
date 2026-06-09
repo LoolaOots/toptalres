@@ -6,7 +6,7 @@
  * Validation: signInSchema from src/lib/validation/auth.ts (email trimmed + lowercased, password max 64).
  * Submission: Calls signIn() Server Action → Supabase signInWithPassword → role-based redirect.
  * Security: Generic error message hides whether email or password was incorrect.
- * TODO: Redirect already-authenticated users away from this route.
+ * Authenticated users are redirected to their dashboard via redirectIfAuthenticated() in (auth)/layout.tsx.
  */
 
 'use client'

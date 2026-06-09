@@ -1,8 +1,10 @@
 import Image from 'next/image'
 import Link from 'next/link'
 import { Box } from '@mui/material'
+import { redirectIfAuthenticated } from '@/lib/auth'
 
-export default function AuthLayout({ children }: { children: React.ReactNode }) {
+export default async function AuthLayout({ children }: { children: React.ReactNode }) {
+  await redirectIfAuthenticated()
   return (
     <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
 
