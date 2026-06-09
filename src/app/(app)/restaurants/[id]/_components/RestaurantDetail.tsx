@@ -25,6 +25,7 @@ import EditIcon from '@mui/icons-material/Edit'
 import DeleteIcon from '@mui/icons-material/Delete'
 import StarIcon from '@mui/icons-material/Star'
 import LocationOnOutlinedIcon from '@mui/icons-material/LocationOnOutlined'
+import AppButton from '@/components/ui/Button'
 import { RestaurantRow } from '@/types/app-types'
 import { cuisineLabel } from '@/lib/cuisines'
 import { updateRestaurant, deleteRestaurant } from '../actions'
@@ -191,23 +192,21 @@ export default function RestaurantDetail({
 
         {isOwner && !editMode && (
           <Box sx={{ display: 'flex', gap: 1, flexShrink: 0, pt: 0.5 }}>
-            <Button
+            <AppButton
               variant="outlined"
               startIcon={<EditIcon sx={{ fontSize: 16 }} />}
               onClick={() => setEditMode(true)}
-              sx={{ textTransform: 'none', borderRadius: 2 }}
             >
               Edit
-            </Button>
-            <Button
+            </AppButton>
+            <AppButton
               variant="outlined"
               color="error"
               startIcon={<DeleteIcon sx={{ fontSize: 16 }} />}
               onClick={() => setDeleteOpen(true)}
-              sx={{ textTransform: 'none', borderRadius: 2 }}
             >
               Delete
-            </Button>
+            </AppButton>
           </Box>
         )}
 
