@@ -1,3 +1,16 @@
+/*
+ * Register Page ("/register") — Client Component, public only.
+ *
+ * Layout: Shared (auth) layout — white left panel, food image right panel, logo top-left.
+ * Form: Role selector cards (Food Reviewer / Restaurant Owner) → name → email → password → confirm password.
+ * Validation: signUpSchema from src/lib/validation/auth.ts — name min 1/max 100, email max 254,
+ *             password min 8/max 64 (NIST SP 800-63B), passwords must match.
+ * Submission: Calls signUp() Server Action → sanitizes → supabase.auth.signUp with { name, role } metadata
+ *             → DB trigger auto-creates public.users + public.user_preferences rows → role-based redirect.
+ * Submit button label reflects selected role: "Sign Up as a Food Reviewer / Restaurant Owner".
+ * TODO: Redirect already-authenticated users. Handle network timeout gracefully.
+ */
+
 'use client'
 
 import { useState } from 'react'

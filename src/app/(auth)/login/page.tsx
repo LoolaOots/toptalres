@@ -1,3 +1,14 @@
+/*
+ * Sign In Page ("/login") — Client Component, public only.
+ *
+ * Layout: Shared (auth) layout — white left panel with form, food image right panel, logo top-left.
+ * Form: Email + Password fields, inline Zod validation errors, server error Alert banner.
+ * Validation: signInSchema from src/lib/validation/auth.ts (email trimmed + lowercased, password max 64).
+ * Submission: Calls signIn() Server Action → Supabase signInWithPassword → role-based redirect.
+ * Security: Generic error message hides whether email or password was incorrect.
+ * TODO: Redirect already-authenticated users away from this route.
+ */
+
 'use client'
 
 import { useState } from 'react'

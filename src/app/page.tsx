@@ -1,3 +1,15 @@
+/*
+ * Landing Page ("/") — Server Component, public only.
+ *
+ * Layout: Full viewport height, two equal columns, no scroll.
+ * Left:  Logo (top-left), title split across 3 lines, subtitle, Write a Review + Find Top Rated icons.
+ * Right: Food hero image (food-hero.jpg) with dark gradient overlay, Sign Up + Sign In pill buttons.
+ *
+ * Font: Proxima Nova Bold (Montserrat Bold fallback via --font-proxima-nova CSS variable).
+ * Buttons: Reusable Button component with colorScheme="light" for white outlined style on dark background.
+ * TODO: Add auth redirect — authenticated users should not see this page.
+ */
+
 import Image from 'next/image'
 import { Box, Typography, Stack } from '@mui/material'
 import EditOutlinedIcon from '@mui/icons-material/EditOutlined'
