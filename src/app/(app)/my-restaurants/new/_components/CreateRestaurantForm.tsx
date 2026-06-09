@@ -1,18 +1,21 @@
 'use client'
 
-import { useState, useTransition } from 'react'
-import Link from 'next/link'
+import { useState } from 'react'
+import { useForm, Controller } from 'react-hook-form'
+import { zodResolver } from '@hookform/resolvers/zod'
 import {
   Box,
-  Button,
   TextField,
   Select,
   MenuItem,
   FormControl,
   InputLabel,
+  FormHelperText,
   Alert,
   Typography,
 } from '@mui/material'
+import Button from '@/components/ui/Button'
+import { restaurantSchema, type RestaurantFormData } from '@/lib/validation/restaurant'
 import { createRestaurant } from '../../actions'
 
 interface CreateRestaurantFormProps {
@@ -20,31 +23,36 @@ interface CreateRestaurantFormProps {
 }
 
 export default function CreateRestaurantForm({ cuisineOptions }: CreateRestaurantFormProps) {
-  const [title, setTitle] = useState('')
-  const [location, setLocation] = useState('')
-  const [description, setDescription] = useState('')
-  const [cuisine, setCuisine] = useState('')
-  const [imageUrl, setImageUrl] = useState('')
-  const [error, setError] = useState<string | null>(null)
-  const [isPending, startTransition] = useTransition()
+  const [serverError, setServerError] = useState<string | null>(null)
 
-  const handleSubmit = () => {
-    setError(null)
-    startTransition(async () => {
-      const result = await createRestaurant({ title, location, description, cuisine, preview_image_url: imageUrl })
-      if (result?.error) setError(result.error)
-    })
+  const {
+    register,
+    handleSubmit,
+    control,
+    watch,
+    formState: { errors, isSubmitting },
+  } = useForm<RestaurantFormData>({
+    resolver: zodResolver(restaurantSchema),
+    defaultValues: { title: '', location: '', description: '', cuisine: '', preview_image_url: '' },
+  })
+
+  const previewUrl = watch('preview_image_url')
+
+  const onSubmit = async (data: RestaurantFormData) => {
+    setServerError(null)
+    const result = await createRestaurant(data)
+    if (result?.error) setServerError(result.error)
   }
 
   return (
-    <Box>
-      {error && (
-        <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }} onClose={() => setError(null)}>
-          {error}
+    <Box component="form" onSubmit={handleSubmit(onSubmit)} noValidate>
+      {serverError && (
+        <Alert severity="error" sx={{ mb: 3, borderRadius: 2 }} onClose={() => setServerError(null)}>
+          {serverError}
         </Alert>
       )}
 
-      {/* Image preview */}
+      {/* Live image preview */}
       <Box
         sx={{
           width: '100%',
@@ -58,88 +66,90 @@ export default function CreateRestaurantForm({ cuisineOptions }: CreateRestauran
           mb: 3,
         }}
       >
-        {imageUrl ? (
+        {previewUrl ? (
           <img
-            src={imageUrl}
+            src={previewUrl}
             alt="Preview"
             style={{ width: '100%', height: '100%', objectFit: 'cover', display: 'block' }}
           />
         ) : (
-          <Typography sx={{ color: 'text.disabled', fontSize: '0.85rem' }}>Image preview</Typography>
+          <Typography sx={{ color: 'text.disabled', fontSize: '0.85rem' }}>
+            Image preview
+          </Typography>
         )}
       </Box>
 
       <TextField
+        {...register('preview_image_url')}
         label="Preview image URL"
-        value={imageUrl}
-        onChange={(e) => setImageUrl(e.target.value)}
         fullWidth
         size="small"
         placeholder="https://..."
+        error={!!errors.preview_image_url}
+        helperText={errors.preview_image_url?.message}
         sx={{ mb: 3, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
       />
 
       <TextField
+        {...register('title')}
         label="Restaurant name"
-        value={title}
-        onChange={(e) => setTitle(e.target.value)}
         fullWidth
         required
-        sx={{ mb: 3, '& .MuiOutlinedInput-root': { borderRadius: 2 }, '& input': { fontSize: '1.1rem', fontWeight: 700 } }}
+        error={!!errors.title}
+        helperText={errors.title?.message}
+        sx={{
+          mb: 3,
+          '& .MuiOutlinedInput-root': { borderRadius: 2 },
+          '& input': { fontSize: '1.1rem', fontWeight: 700 },
+        }}
       />
 
       <Box sx={{ display: 'flex', gap: 2, mb: 3, flexWrap: 'wrap' }}>
-        <FormControl size="small" sx={{ minWidth: 200 }} required>
-          <InputLabel>Cuisine</InputLabel>
-          <Select
-            value={cuisine}
-            label="Cuisine"
-            onChange={(e) => setCuisine(e.target.value)}
-          >
-            {cuisineOptions.map(({ value, label }) => (
-              <MenuItem key={value} value={value}>
-                {label}
-              </MenuItem>
-            ))}
-          </Select>
-        </FormControl>
+        <Controller
+          name="cuisine"
+          control={control}
+          render={({ field }) => (
+            <FormControl size="small" sx={{ minWidth: 200 }} required error={!!errors.cuisine}>
+              <InputLabel>Cuisine</InputLabel>
+              <Select {...field} label="Cuisine">
+                {cuisineOptions.map(({ value, label }) => (
+                  <MenuItem key={value} value={value}>
+                    {label}
+                  </MenuItem>
+                ))}
+              </Select>
+              {errors.cuisine && <FormHelperText>{errors.cuisine.message}</FormHelperText>}
+            </FormControl>
+          )}
+        />
 
         <TextField
+          {...register('location')}
           label="Location"
-          value={location}
-          onChange={(e) => setLocation(e.target.value)}
           size="small"
           required
+          error={!!errors.location}
+          helperText={errors.location?.message}
           sx={{ flex: 1, minWidth: 200, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
         />
       </Box>
 
       <TextField
+        {...register('description')}
         label="Description"
-        value={description}
-        onChange={(e) => setDescription(e.target.value)}
         fullWidth
         multiline
         rows={4}
+        error={!!errors.description}
+        helperText={errors.description?.message}
         sx={{ mb: 4, '& .MuiOutlinedInput-root': { borderRadius: 2 } }}
       />
 
       <Box sx={{ display: 'flex', gap: 2 }}>
-        <Button
-          variant="contained"
-          onClick={handleSubmit}
-          disabled={isPending}
-          sx={{ textTransform: 'none', borderRadius: 2, fontWeight: 600 }}
-        >
-          {isPending ? 'Saving…' : 'Create restaurant'}
+        <Button type="submit" disabled={isSubmitting}>
+          {isSubmitting ? 'Saving…' : 'Create restaurant'}
         </Button>
-        <Button
-          component={Link}
-          href="/my-restaurants"
-          variant="outlined"
-          disabled={isPending}
-          sx={{ textTransform: 'none', borderRadius: 2 }}
-        >
+        <Button variant="outlined" href="/my-restaurants" disabled={isSubmitting}>
           Cancel
         </Button>
       </Box>

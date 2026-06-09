@@ -1,3 +1,16 @@
+/*
+ * Create Restaurant Page ("/my-restaurants/new") — Owner only.
+ *
+ * Server Component: guards access with requireOwner(), then fetches cuisine options via the
+ * get_cuisine_types() RPC (same source of truth as the restaurant list filters).
+ * Renders CreateRestaurantForm (Client Component) — a react-hook-form + Zod form
+ * (src/lib/validation/restaurant.ts) shared with the edit form on Restaurant Detail.
+ * On submit, createRestaurant() (my-restaurants/actions.ts) validates server-side, inserts
+ * the row with owner_id = current user, revalidates /my-restaurants and /restaurants,
+ * and redirects back to /my-restaurants.
+ * "My Restaurants" back button at the top for cancelling out without saving.
+ */
+
 import Link from 'next/link'
 import { Container, Typography, Button } from '@mui/material'
 import ArrowBackIcon from '@mui/icons-material/ArrowBack'

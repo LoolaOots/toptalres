@@ -2,23 +2,9 @@
 
 import { redirect } from 'next/navigation'
 import { revalidatePath } from 'next/cache'
-import { z } from 'zod'
 import { createClient } from '@/lib/supabase/server'
 import { CuisineType } from '@/types/app-types'
-
-const restaurantSchema = z.object({
-  title: z.string().trim().min(1, 'Title is required').max(100),
-  location: z.string().trim().min(1, 'Location is required').max(200),
-  description: z.string().trim().max(2000).optional(),
-  cuisine: z.string().min(1, 'Cuisine is required'),
-  preview_image_url: z
-    .string()
-    .url('Must be a valid URL')
-    .optional()
-    .or(z.literal('')),
-})
-
-export type RestaurantFormData = z.infer<typeof restaurantSchema>
+import { restaurantSchema, type RestaurantFormData } from '@/lib/validation/restaurant'
 
 export async function createRestaurant(
   data: RestaurantFormData,
