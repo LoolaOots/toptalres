@@ -1,6 +1,6 @@
 import Image from 'next/image'
 import Link from 'next/link'
-import { Box, AppBar, Toolbar } from '@mui/material'
+import { Box, AppBar, Toolbar, Button } from '@mui/material'
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import NavbarMenu from './_components/NavbarMenu'
@@ -18,13 +18,20 @@ export default async function AppLayout({ children }: { children: React.ReactNod
         sx={{ bgcolor: '#fff', borderBottom: '1px solid', borderColor: 'divider' }}
       >
         <Toolbar sx={{ justifyContent: 'space-between', px: { xs: 2, sm: 4 } }}>
-          <Link href="/" style={{ display: 'flex', alignItems: 'center' }}>
+          <Link href="/restaurants" style={{ display: 'flex', alignItems: 'center' }}>
             <Image src="/logo.png" alt="Toptal" width={40} height={40} priority />
           </Link>
-          <NavbarMenu
-            userName={user.user_metadata?.name ?? user.email ?? 'User'}
-            role={user.user_metadata?.role ?? 'reviewer'}
-          />
+          <Box sx={{ display: 'flex', alignItems: 'center', gap: 1 }}>
+            <Link href="/restaurants" style={{ textDecoration: 'none' }}>
+              <Button sx={{ textTransform: 'none', fontWeight: 600, color: 'text.primary' }}>
+                View All Restaurants
+              </Button>
+            </Link>
+            <NavbarMenu
+              userName={user.user_metadata?.name ?? user.email ?? 'User'}
+              role={user.user_metadata?.role ?? 'reviewer'}
+            />
+          </Box>
         </Toolbar>
       </AppBar>
 

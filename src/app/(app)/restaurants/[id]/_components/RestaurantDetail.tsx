@@ -391,7 +391,7 @@ export default function RestaurantDetail({
         onClose={() => !isPending && setDeleteOpen(false)}
         maxWidth="xs"
         fullWidth
-        PaperProps={{ sx: { borderRadius: 3 } }}
+        slotProps={{ paper: { sx: { borderRadius: 3 } } }}
       >
         <DialogTitle sx={{ fontWeight: 700 }}>Delete restaurant?</DialogTitle>
         <DialogContent>
