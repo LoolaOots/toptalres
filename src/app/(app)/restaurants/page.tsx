@@ -1,5 +1,5 @@
 /*
- * Restaurant List ("/restaurants") — Reviewer only.
+ * Restaurant List ("/restaurants") — Authenticated users (both reviewers and owners).
  *
  * Server Component: fetches user_preferences from DB for sort/filter state, then queries
  * restaurants with those filters applied. Filter/sort changes go through Server Actions
@@ -8,7 +8,7 @@
  */
 
 import { Container, Typography, Box } from '@mui/material'
-import { requireReviewer } from '@/lib/auth'
+import { requireAuth } from '@/lib/auth'
 import { createClient } from '@/lib/supabase/server'
 import { Database } from '@/types/database'
 import { CuisineType, RestaurantRow, SortOrderPref } from '@/types/app-types'
@@ -17,7 +17,7 @@ import RestaurantFilters from './_components/RestaurantFilters'
 import RestaurantCard from './_components/RestaurantCard'
 
 export default async function RestaurantsPage() {
-  const user = await requireReviewer()
+  const user = await requireAuth()
   const supabase = await createClient()
 
   // Fetch this user's saved filter/sort preferences
