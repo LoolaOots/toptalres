@@ -23,7 +23,7 @@ import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined'
 import Button from '@/components/ui/Button'
 import { signUp } from '../actions'
 import { signUpSchema, type SignUpFormData } from '@/lib/validation/auth'
-import { UserRole } from '@/types/database'
+import { UserRole } from '@/types/app-types'
 
 type FormData = SignUpFormData
 

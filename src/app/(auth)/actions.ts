@@ -3,7 +3,7 @@
 import { redirect } from 'next/navigation'
 import { createClient } from '@/lib/supabase/server'
 import { signInSchema, signUpSchema } from '@/lib/validation/auth'
-import { UserRole } from '@/types/database'
+import { UserRole } from '@/types/app-types'
 
 export type AuthError = { error: string }
 
