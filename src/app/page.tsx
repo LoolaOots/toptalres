@@ -21,7 +21,7 @@ export default async function LandingPage() {
   await redirectIfAuthenticated()
 
   return (
-    <Box sx={{ display: 'flex', height: '100vh', overflow: 'hidden' }}>
+    <Box sx={{ display: 'flex', flexDirection: { xs: 'column', md: 'row' }, minHeight: '100vh', height: { md: '100vh' }, overflow: { md: 'hidden' } }}>
 
       {/* LEFT PANEL */}
       <Box
@@ -30,12 +30,13 @@ export default async function LandingPage() {
           bgcolor: '#fff',
           display: 'flex',
           flexDirection: 'column',
-          px: 6,
-          py: 5,
+          px: { xs: 3, sm: 4, md: 6 },
+          py: { xs: 4, md: 5 },
+          order: { xs: 2, md: 0 },
         }}
       >
-        {/* Logo */}
-        <Box sx={{ mb: 'auto' }}>
+        {/* Logo — desktop only here; shown over the hero image on mobile */}
+        <Box sx={{ display: { xs: 'none', md: 'block' }, mb: 'auto' }}>
           <Image src="/logo.png" alt="Toptal logo" width={48} height={48} priority />
         </Box>
 
@@ -49,7 +50,7 @@ export default async function LandingPage() {
                 sx={{
                   fontFamily: 'var(--font-proxima-nova), Montserrat, sans-serif',
                   fontWeight: 700,
-                  fontSize: { xs: '3.5rem', md: '5rem' },
+                  fontSize: { xs: '2.5rem', sm: '3.5rem', md: '5rem' },
                   lineHeight: 1.05,
                   color: '#111',
                   display: 'block',
@@ -103,7 +104,7 @@ export default async function LandingPage() {
       </Box>
 
       {/* RIGHT PANEL */}
-      <Box sx={{ flex: 1, position: 'relative' }}>
+      <Box sx={{ flex: { md: 1 }, position: 'relative', height: { xs: 280, md: 'auto' }, order: { xs: 1, md: 0 } }}>
         {/* Food background image */}
         <Image
           src="/food-hero.jpg"
@@ -121,6 +122,11 @@ export default async function LandingPage() {
             background: 'linear-gradient(to bottom, rgba(0,0,0,0.35) 0%, transparent 40%)',
           }}
         />
+
+        {/* Logo — mobile only, overlaid on the hero image */}
+        <Box sx={{ position: 'absolute', top: 24, left: 24, zIndex: 1, display: { xs: 'block', md: 'none' } }}>
+          <Image src="/logo.png" alt="Toptal logo" width={40} height={40} priority />
+        </Box>
 
         {/* Sign Up / Sign In buttons */}
         <Box
